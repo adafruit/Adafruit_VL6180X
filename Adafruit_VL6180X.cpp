@@ -35,8 +35,8 @@ Adafruit_VL6180X::Adafruit_VL6180X(void) {
     @brief  Setups the HW
 */
 /**************************************************************************/
-boolean Adafruit_VL6180X::begin(void) {
-  _i2caddr = VL6180X_DEFAULT_I2C_ADDR;
+boolean Adafruit_VL6180X::begin(uint8_t _addr = VL6180X_DEFAULT_I2C_ADDR) {
+  _i2caddr = _addr;
   Wire.begin();
 
   if (read8(VL6180X_REG_IDENTIFICATION_MODEL_ID) != 0xB4) {
@@ -224,6 +224,18 @@ float Adafruit_VL6180X::readLux(uint8_t gain) {
 
   return lux;
 }
+
+/**************************************************************************/
+/*! 
+    changeAddr()
+*/
+/**************************************************************************/
+
+float Adafruit_VL6180X::readLux(uint8_t _addr) {
+  write8(0x212,_addr&0x7F);	
+  _i2caddr = _addr;
+}
+
 
 /**************************************************************************/
 /*! 

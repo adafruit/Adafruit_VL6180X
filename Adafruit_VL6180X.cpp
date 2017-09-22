@@ -231,7 +231,7 @@ float Adafruit_VL6180X::readLux(uint8_t gain) {
 */
 /**************************************************************************/
 
-float Adafruit_VL6180X::readLux(uint8_t _addr) {
+void Adafruit_VL6180X::changeAddr(uint8_t _addr) {
   write8(0x212,_addr&0x7F);	
   _i2caddr = _addr;
 }

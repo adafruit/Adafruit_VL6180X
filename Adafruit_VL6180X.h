@@ -1,14 +1,14 @@
 /**************************************************************************/
-/*! 
+/*!
     @file     Adafruit_VL6180X.h
     @author   Limor Fried (Adafruit Industries)
 	@license  BSD (see license.txt)
-	
+
 	This is a library for the Adafruit VL6180 ToF Sensor breakout board
 	----> http://www.adafruit.com/products/3316
-	
-	Adafruit invests time and resources providing this open source code, 
-	please support Adafruit and open-source hardware by purchasing 
+
+	Adafruit invests time and resources providing this open source code,
+	please support Adafruit and open-source hardware by purchasing
 	products from Adafruit!
 
 	@section  HISTORY
@@ -69,7 +69,7 @@ class Adafruit_VL6180X {
   uint8_t readRange(void);
   float   readLux(uint8_t gain);
   uint8_t readRangeStatus(void);
-  void changeAddr(uint8 _addr);
+  void changeAddr(uint8_t _addr);
 
  private:
   void loadSettings(void);

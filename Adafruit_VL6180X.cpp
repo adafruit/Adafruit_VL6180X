@@ -1,14 +1,14 @@
 /**************************************************************************/
-/*! 
+/*!
     @file     Adafruit_VL6180X.cpp
     @author   Limor Fried (Adafruit Industries)
 	@license  BSD (see license.txt)
-	
+
 	This is a library for the Adafruit VL6180 ToF Sensor breakout board
 	----> http://www.adafruit.com/products/3316
-	
-	Adafruit invests time and resources providing this open source code, 
-	please support Adafruit and open-source hardware by purchasing 
+
+	Adafruit invests time and resources providing this open source code,
+	please support Adafruit and open-source hardware by purchasing
 	products from Adafruit!
 
 	@section  HISTORY
@@ -23,7 +23,7 @@
 
 
 /**************************************************************************/
-/*! 
+/*!
     @brief  Instantiates a new VL6180X class
 */
 /**************************************************************************/
@@ -31,7 +31,7 @@ Adafruit_VL6180X::Adafruit_VL6180X(void) {
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief  Setups the HW
 */
 /**************************************************************************/
@@ -53,7 +53,7 @@ boolean Adafruit_VL6180X::begin(uint8_t _addr = VL6180X_DEFAULT_I2C_ADDR) {
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief  Load the settings for ranging
 */
 /**************************************************************************/
@@ -120,7 +120,7 @@ void Adafruit_VL6180X::loadSettings(void) {
 
 
 /**************************************************************************/
-/*! 
+/*!
     @brief  Single shot ranging
 */
 /**************************************************************************/
@@ -146,7 +146,7 @@ uint8_t Adafruit_VL6180X::readRange(void) {
 
 
 /**************************************************************************/
-/*! 
+/*!
     @brief  Error message (retreive after ranging)
 */
 /**************************************************************************/
@@ -157,7 +157,7 @@ uint8_t Adafruit_VL6180X::readRangeStatus(void) {
 
 
 /**************************************************************************/
-/*! 
+/*!
     @brief  Single shot ranging
 */
 /**************************************************************************/
@@ -169,7 +169,7 @@ float Adafruit_VL6180X::readLux(uint8_t gain) {
   reg &= ~0x38;
   reg |= (0x4 << 3); // IRQ on ALS ready
   write8(VL6180X_REG_SYSTEM_INTERRUPT_CONFIG, reg);
-  
+
   // 100 ms integration period
   write8(VL6180X_REG_SYSALS_INTEGRATION_PERIOD_HI, 0);
   write8(VL6180X_REG_SYSALS_INTEGRATION_PERIOD_LO, 100);
@@ -193,28 +193,28 @@ float Adafruit_VL6180X::readLux(uint8_t gain) {
   write8(VL6180X_REG_SYSTEM_INTERRUPT_CLEAR, 0x07);
 
   lux *= 0.32; // calibrated count/lux
-  switch(gain) { 
-  case VL6180X_ALS_GAIN_1: 
+  switch(gain) {
+  case VL6180X_ALS_GAIN_1:
     break;
-  case VL6180X_ALS_GAIN_1_25: 
+  case VL6180X_ALS_GAIN_1_25:
     lux /= 1.25;
     break;
-  case VL6180X_ALS_GAIN_1_67: 
+  case VL6180X_ALS_GAIN_1_67:
     lux /= 1.76;
     break;
-  case VL6180X_ALS_GAIN_2_5: 
+  case VL6180X_ALS_GAIN_2_5:
     lux /= 2.5;
     break;
-  case VL6180X_ALS_GAIN_5: 
+  case VL6180X_ALS_GAIN_5:
     lux /= 5;
     break;
-  case VL6180X_ALS_GAIN_10: 
+  case VL6180X_ALS_GAIN_10:
     lux /= 10;
     break;
-  case VL6180X_ALS_GAIN_20: 
+  case VL6180X_ALS_GAIN_20:
     lux /= 20;
     break;
-  case VL6180X_ALS_GAIN_40: 
+  case VL6180X_ALS_GAIN_40:
     lux /= 20;
     break;
   }
@@ -226,19 +226,19 @@ float Adafruit_VL6180X::readLux(uint8_t gain) {
 }
 
 /**************************************************************************/
-/*! 
+/*!
     changeAddr()
 */
 /**************************************************************************/
 
 void Adafruit_VL6180X::changeAddr(uint8_t _addr) {
-  write8(0x212,_addr&0x7F);	
+  write8(0x212,_addr&0x7F);
   _i2caddr = _addr;
 }
 
 
 /**************************************************************************/
-/*! 
+/*!
     @brief  I2C low level interfacing
 */
 /**************************************************************************/
@@ -281,7 +281,7 @@ uint16_t Adafruit_VL6180X::read16(uint16_t address)
   data <<= 8;
   while(!Wire.available());
   data |= Wire.read();
-  
+
   return data;
 }
 
@@ -291,7 +291,7 @@ void Adafruit_VL6180X::write8(uint16_t address, uint8_t data)
   Wire.beginTransmission(_i2caddr);
   Wire.write(address>>8);
   Wire.write(address);
-  Wire.write(data);  
+  Wire.write(data);
   Wire.endTransmission();
 
 #if defined(I2C_DEBUG)

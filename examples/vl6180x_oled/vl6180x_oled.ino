@@ -1,16 +1,11 @@
 /* This example shows how to use continuous mode to take
-range measurements with the VL53L0X. It is based on
-vl53l0x_ContinuousRanging_Example.c from the VL53L0X API.
-
+range measurements with the VL6180X.
 The range readings are in units of mm. */
 
 #include <Wire.h>
-#include <VL53L0X.h>
 #include <SPI.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
-
-#include <Wire.h>
 #include "Adafruit_VL6180X.h"
 
 Adafruit_VL6180X vl = Adafruit_VL6180X();

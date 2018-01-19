@@ -1,21 +1,30 @@
-/**************************************************************************/
-/*! 
-    @file     Adafruit_VL6180X.cpp
-    @author   Limor Fried (Adafruit Industries)
-	@license  BSD (see license.txt)
-	
-	This is a library for the Adafruit VL6180 ToF Sensor breakout board
-	----> http://www.adafruit.com/products/3316
-	
-	Adafruit invests time and resources providing this open source code, 
-	please support Adafruit and open-source hardware by purchasing 
-	products from Adafruit!
-
-	@section  HISTORY
-
-    v1.0  - First release
-*/
-/**************************************************************************/
+/*!
+ * @file Adafruit_VL6180X.cpp
+ *
+ * @mainpage Adafruit VL6180X ToF sensor driver
+ *
+ * @section intro_sec Introduction
+ *
+ * This is the documentation for Adafruit's VL6180X driver for the
+ * Arduino platform.  It is designed specifically to work with the
+ * Adafruit VL6180X breakout: http://www.adafruit.com/products/3316
+ *
+ * These sensors use I2C to communicate, 2 pins (SCL+SDA) are required
+ * to interface with the breakout.
+ *
+ * Adafruit invests time and resources providing this open source code,
+ * please support Adafruit and open-source hardware by purchasing
+ * products from Adafruit!
+ *
+ * @section author Author
+ *
+ * Written by ladyada for Adafruit Industries.
+ *
+ * @section license License
+ *
+ * BSD license, all text here must be included in any redistribution.
+ *
+ */
 
 #include "Arduino.h"
 #include <Wire.h>
@@ -32,12 +41,20 @@ Adafruit_VL6180X::Adafruit_VL6180X(void) {
 
 /**************************************************************************/
 /*! 
-    @brief  Setups the HW
+    @brief  Initializes I2C interface, checks that VL6180X is found and resets chip.
+    @param  theWire Optional pointer to I2C interface, &Wire is used by default
+    @returns True if chip found and initialized, False otherwise
 */
 /**************************************************************************/
-boolean Adafruit_VL6180X::begin(void) {
+boolean Adafruit_VL6180X::begin(TwoWire *theWire) {
   _i2caddr = VL6180X_DEFAULT_I2C_ADDR;
-  Wire.begin();
+  if (! theWire) {
+    _i2c = &Wire;
+  } else {
+    _i2c = theWire;
+  }
+  _i2c-> begin();
+
 
   if (read8(VL6180X_REG_IDENTIFICATION_MODEL_ID) != 0xB4) {
     return false;
@@ -54,7 +71,7 @@ boolean Adafruit_VL6180X::begin(void) {
 
 /**************************************************************************/
 /*! 
-    @brief  Load the settings for ranging
+    @brief  Load the settings for proximity/distance ranging
 */
 /**************************************************************************/
 
@@ -121,7 +138,8 @@ void Adafruit_VL6180X::loadSettings(void) {
 
 /**************************************************************************/
 /*! 
-    @brief  Single shot ranging
+    @brief  Single shot ranging. Be sure to check the return of {@link readRangeStatus} to before using the return value!
+    @return Distance in millimeters if valid
 */
 /**************************************************************************/
 
@@ -147,7 +165,8 @@ uint8_t Adafruit_VL6180X::readRange(void) {
 
 /**************************************************************************/
 /*! 
-    @brief  Error message (retreive after ranging)
+    @brief  Request ranging success/error message (retreive after ranging)
+    @returns One of possible VL6180X_ERROR_* values
 */
 /**************************************************************************/
 
@@ -158,7 +177,9 @@ uint8_t Adafruit_VL6180X::readRangeStatus(void) {
 
 /**************************************************************************/
 /*! 
-    @brief  Single shot ranging
+    @brief  Single shot lux measurement
+    @param  gain Gain setting, one of VL6180X_ALS_GAIN_*
+    @returns Lux reading
 */
 /**************************************************************************/
 

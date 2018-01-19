@@ -285,10 +285,8 @@ uint16_t Adafruit_VL6180X::read16(uint16_t address)
   Wire.endTransmission();
 
   Wire.requestFrom(_i2caddr, (uint8_t)2);
-  while(!Wire.available());
   data = Wire.read();
   data <<= 8;
-  while(!Wire.available());
   data |= Wire.read();
   
   return data;

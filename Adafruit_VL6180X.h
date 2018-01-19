@@ -74,7 +74,7 @@
 #define VL6180X_ERROR_RANGEOFLOW   15  ///< Raw range algo overflow
 
 
-
+///! Class for managing connection and state to a VL6180X sensor
 class Adafruit_VL6180X {
  public:
   Adafruit_VL6180X();

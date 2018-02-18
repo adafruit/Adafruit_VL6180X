@@ -23,7 +23,7 @@
 
 //#define I2C_DEBUG
 
-#define VL6180X_DEFAULT_I2C_ADDR 0x29  ///< The fixed I2C addres
+#define VL6180X_DEFAULT_I2C_ADDR 0x29  ///< Default I2C addres
 
 ///! Device model identification number
 #define VL6180X_REG_IDENTIFICATION_MODEL_ID    0x000
@@ -78,10 +78,12 @@
 class Adafruit_VL6180X {
  public:
   Adafruit_VL6180X();
-  boolean begin(TwoWire *theWire = NULL);
+  boolean begin(TwoWire *theWire = NULL, uint8_t i2caddr = VL6180X_DEFAULT_I2C_ADDR);
   uint8_t readRange(void);
   float   readLux(uint8_t gain);
   uint8_t readRangeStatus(void);
+  void changeAddress(uint8_t newAddr);
+  uint8_t getAddress();
 
  private:
   void loadSettings(void);

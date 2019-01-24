@@ -20,6 +20,9 @@
 
 #include "Arduino.h"
 #include <Wire.h>
+#if defined( __cplusplus ) && __cplusplus >= 201103L
+#include <functional>
+#endif
 
 //#define I2C_DEBUG
 
@@ -83,6 +86,13 @@ class Adafruit_VL6180X {
   float   readLux(uint8_t gain);
   uint8_t readRangeStatus(void);
 
+///! If you use async API's, do _not_ use synchronous APIs at the same time!  These are mutually exclusive interaction models.
+#if defined( __cplusplus ) && __cplusplus >= 201103L
+  bool asyncReadRange(std::function<void (uint8_t range, uint8_t status)> onCompleteCallback);
+  bool asyncReadLux(uint8_t gain, std::function<void (float lux)> onCompleteCallback);
+  void asyncLoop();
+#endif
+
  private:
   void loadSettings(void);
 
@@ -92,6 +102,23 @@ class Adafruit_VL6180X {
   uint16_t read16(uint16_t address);
   uint8_t read8(uint16_t address);
 
+  bool readyForReadRange();
+  bool newSampleReadyThresholdEventSet();
+  void setReadLuxRegisters(uint8_t gain);
+  float readAdjustedLux(uint8_t gain);
+
   TwoWire *_i2c;
   uint8_t _i2caddr;
+
+#if defined( __cplusplus ) && __cplusplus >= 201103L
+  enum State
+  {
+      ready,
+      measurement_not_started,
+      measurement_started
+  };
+  static void asyncDone() { }
+  std::function<void ()> asyncLoopFunction = asyncDone;
+  State state = ready;
+#endif
 };

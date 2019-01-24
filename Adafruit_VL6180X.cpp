@@ -1,3 +1,5 @@
+#include <utility>
+
 /*!
  * @file Adafruit_VL6180X.cpp
  *
@@ -145,7 +147,7 @@ void Adafruit_VL6180X::loadSettings(void) {
 
 uint8_t Adafruit_VL6180X::readRange(void) {
   // wait for device to be ready for range measurement
-  while (! (read8(VL6180X_REG_RESULT_RANGE_STATUS) & 0x01));
+  while (! readyForReadRange());
 
   // Start a range measurement
   write8(VL6180X_REG_SYSRANGE_START, 0x01);
@@ -175,6 +177,105 @@ uint8_t Adafruit_VL6180X::readRangeStatus(void) {
 }
 
 
+
+#if defined( __cplusplus ) && __cplusplus >= 201103L
+/**************************************************************************/
+/*!
+    @brief Kick off reading of range millis asynchronously.
+
+    @param onCompleteCallback Invoked when the reading is complete from asyncLoop.
+    @returns True if no other measurement was active and this callback was accepted.
+*/
+bool Adafruit_VL6180X::asyncReadRange(std::function<void (uint8_t range, uint8_t status)> onCompleteCallback)
+{
+    if (state != ready) return false;
+    state = measurement_not_started;
+
+    asyncLoopFunction = [onCompleteCallback, this](){
+        switch(state)
+        {
+            case measurement_not_started:
+                if (!readyForReadRange())
+                    return; // Try again next loop
+                // Start a range measurement
+                write8(VL6180X_REG_SYSRANGE_START, 0x01);
+                state = measurement_started;
+                break;
+            case measurement_started:
+            {
+                // Poll until bit 2 is set
+                if (! (read8(VL6180X_REG_RESULT_INTERRUPT_STATUS_GPIO) & 0x04))
+                    return; // Try again next loop
+                uint8_t range = read8(VL6180X_REG_RESULT_RANGE_VAL); // Read range in mm
+                write8(VL6180X_REG_SYSTEM_INTERRUPT_CLEAR, 0x07);    // Clear interrupt
+                uint8_t status = (read8(VL6180X_REG_RESULT_RANGE_STATUS) >> 4);
+
+                // Clear async state so callback can schedule a new measurement if desired.
+                asyncLoopFunction = asyncDone;
+                state = ready;
+
+                onCompleteCallback(range, status);
+                break;
+            }
+        }
+    };
+    return true;
+}
+
+/**************************************************************************/
+/*!
+    @brief Kick off reading of lux asynchronously.
+
+    @param onCompleteCallback Invoked when the reading is complete from asyncLoop.
+    @returns True if no other measurement was active and this callback was accepted.
+*/
+bool Adafruit_VL6180X::asyncReadLux(uint8_t gain, std::function<void (float lux)> onCompleteCallback)
+{
+    if (state != ready) return false;
+    state = measurement_not_started;
+
+    asyncLoopFunction = [gain, onCompleteCallback, this](){
+        switch(state)
+        {
+            case measurement_not_started:
+                setReadLuxRegisters(gain);
+                state = measurement_started;
+                break;
+            case measurement_started:
+            {
+                // Poll until bit 2 is set
+                if (! newSampleReadyThresholdEventSet())
+                    return; // Try again next loop
+                float lux = readAdjustedLux(gain);
+
+                // Clear async state so callback can schedule a new measurement if desired.
+                asyncLoopFunction = asyncDone;
+                state = ready;
+
+                onCompleteCallback(lux);
+                break;
+            }
+        }
+    };
+    return true;
+}
+
+/**************************************************************************/
+/*!
+    @brief When using async interactions, periodically call this.
+
+    The thread which calls will be the thread on which the async completion callback is invoked.
+*/
+/**************************************************************************/
+void Adafruit_VL6180X::asyncLoop()
+{
+    asyncLoopFunction();
+}
+
+
+#endif
+
+
 /**************************************************************************/
 /*! 
     @brief  Single shot lux measurement
@@ -184,66 +285,12 @@ uint8_t Adafruit_VL6180X::readRangeStatus(void) {
 /**************************************************************************/
 
 float Adafruit_VL6180X::readLux(uint8_t gain) {
-  uint8_t reg;
-
-  reg = read8(VL6180X_REG_SYSTEM_INTERRUPT_CONFIG);
-  reg &= ~0x38;
-  reg |= (0x4 << 3); // IRQ on ALS ready
-  write8(VL6180X_REG_SYSTEM_INTERRUPT_CONFIG, reg);
-  
-  // 100 ms integration period
-  write8(VL6180X_REG_SYSALS_INTEGRATION_PERIOD_HI, 0);
-  write8(VL6180X_REG_SYSALS_INTEGRATION_PERIOD_LO, 100);
-
-  // analog gain
-  if (gain > VL6180X_ALS_GAIN_40) {
-    gain = VL6180X_ALS_GAIN_40;
-  }
-  write8(VL6180X_REG_SYSALS_ANALOGUE_GAIN, 0x40 | gain);
-
-  // start ALS
-  write8(VL6180X_REG_SYSALS_START, 0x1);
+  setReadLuxRegisters(gain);
 
   // Poll until "New Sample Ready threshold event" is set
-  while (4 != ((read8(VL6180X_REG_RESULT_INTERRUPT_STATUS_GPIO) >> 3) & 0x7));
+  while (!newSampleReadyThresholdEventSet());
 
-  // read lux!
-  float lux = read16(VL6180X_REG_RESULT_ALS_VAL);
-
-  // clear interrupt
-  write8(VL6180X_REG_SYSTEM_INTERRUPT_CLEAR, 0x07);
-
-  lux *= 0.32; // calibrated count/lux
-  switch(gain) { 
-  case VL6180X_ALS_GAIN_1: 
-    break;
-  case VL6180X_ALS_GAIN_1_25: 
-    lux /= 1.25;
-    break;
-  case VL6180X_ALS_GAIN_1_67: 
-    lux /= 1.67;
-    break;
-  case VL6180X_ALS_GAIN_2_5: 
-    lux /= 2.5;
-    break;
-  case VL6180X_ALS_GAIN_5: 
-    lux /= 5;
-    break;
-  case VL6180X_ALS_GAIN_10: 
-    lux /= 10;
-    break;
-  case VL6180X_ALS_GAIN_20: 
-    lux /= 20;
-    break;
-  case VL6180X_ALS_GAIN_40: 
-    lux /= 40;
-    break;
-  }
-  lux *= 100;
-  lux /= 100; // integration time in ms
-
-
-  return lux;
+  return readAdjustedLux(gain);
 }
 
 /**************************************************************************/
@@ -256,8 +303,6 @@ float Adafruit_VL6180X::readLux(uint8_t gain) {
 // Read 1 byte from the VL6180X at 'address'
 uint8_t Adafruit_VL6180X::read8(uint16_t address)
 {
-  uint8_t data;
-
   Wire.beginTransmission(_i2caddr);
   Wire.write(address>>8);
   Wire.write(address);
@@ -316,4 +361,97 @@ void Adafruit_VL6180X::write16(uint16_t address, uint16_t data)
   Wire.write(data>>8);
   Wire.write(data);
   Wire.endTransmission();
+}
+
+/**************************************************************************/
+/*!
+    @returns true if VL6180X has a range measurement ready to be read
+*/
+/**************************************************************************/
+inline bool Adafruit_VL6180X::readyForReadRange()
+{
+    return static_cast<bool>(read8(VL6180X_REG_RESULT_RANGE_STATUS) & 0x01);
+}
+
+/**************************************************************************/
+/*!
+    @returns true if VL6180X has set the new sample ready GPIO flag
+*/
+/**************************************************************************/
+bool Adafruit_VL6180X::newSampleReadyThresholdEventSet()
+{
+    return (4 == ((read8(VL6180X_REG_RESULT_INTERRUPT_STATUS_GPIO) >> 3) & 0x7));
+}
+
+/**************************************************************************/
+/*!
+    @brief  Sets up registers on VL6180X to begin lux measurement.
+*/
+/**************************************************************************/
+void Adafruit_VL6180X::setReadLuxRegisters(uint8_t gain)
+{
+    uint8_t reg;
+
+    reg = read8(VL6180X_REG_SYSTEM_INTERRUPT_CONFIG);
+    reg &= ~0x38;
+    reg |= (0x4 << 3); // IRQ on ALS ready
+    write8(VL6180X_REG_SYSTEM_INTERRUPT_CONFIG, reg);
+
+    // 100 ms integration period
+    write8(VL6180X_REG_SYSALS_INTEGRATION_PERIOD_HI, 0);
+    write8(VL6180X_REG_SYSALS_INTEGRATION_PERIOD_LO, 100);
+
+    // analog gain
+    if (gain > VL6180X_ALS_GAIN_40) {
+        gain = VL6180X_ALS_GAIN_40;
+    }
+    write8(VL6180X_REG_SYSALS_ANALOGUE_GAIN, 0x40 | gain);
+
+    // start ALS
+    write8(VL6180X_REG_SYSALS_START, 0x1);
+}
+
+/**************************************************************************/
+/*!
+    @returns gain-compensated lux
+*/
+/**************************************************************************/
+float Adafruit_VL6180X::readAdjustedLux(uint8_t gain)
+{
+    // read lux!
+    float lux = read16(VL6180X_REG_RESULT_ALS_VAL);
+
+    // clear interrupt
+    write8(VL6180X_REG_SYSTEM_INTERRUPT_CLEAR, 0x07);
+
+    lux *= 0.32; // calibrated count/lux
+    switch(gain) {
+        case VL6180X_ALS_GAIN_1:
+            break;
+        case VL6180X_ALS_GAIN_1_25:
+            lux /= 1.25;
+            break;
+        case VL6180X_ALS_GAIN_1_67:
+            lux /= 1.67;
+            break;
+        case VL6180X_ALS_GAIN_2_5:
+            lux /= 2.5;
+            break;
+        case VL6180X_ALS_GAIN_5:
+            lux /= 5;
+            break;
+        case VL6180X_ALS_GAIN_10:
+            lux /= 10;
+            break;
+        case VL6180X_ALS_GAIN_20:
+            lux /= 20;
+            break;
+        case VL6180X_ALS_GAIN_40:
+            lux /= 40;
+            break;
+    }
+    lux *= 100;
+    lux /= 100; // integration time in ms
+
+    return lux;
 }

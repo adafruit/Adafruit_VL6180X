@@ -264,13 +264,13 @@ uint8_t Adafruit_VL6180X::read8(uint16_t address)
   Wire.endTransmission();
 
   Wire.requestFrom(_i2caddr, (uint8_t)1);
-  uint8_t r = Wire.read();
+  data = Wire.read();
 
 #if defined(I2C_DEBUG)
-  Serial.print("\t$"); Serial.print(address, HEX); Serial.print(": 0x"); Serial.println(r, HEX);
+  Serial.print("\t$"); Serial.print(address, HEX); Serial.print(": 0x"); Serial.println(data, HEX);
 #endif
 
-  return r;
+  return data;
 }
 
 

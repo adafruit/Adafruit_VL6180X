@@ -1,4 +1,4 @@
-# Adafruit VL6180X Library [![Build Status](https://travis-ci.org/adafruit/Adafruit_VL6180X.svg?branch=master)](https://travis-ci.org/adafruit/Adafruit_VL6180X)
+# Adafruit VL6180X Library [![Build Status](https://travis-ci.com/adafruit/Adafruit_VL6180X.svg?branch=master)](https://travis-ci.com/adafruit/Adafruit_VL6180X)
 
 <img src="https://cdn-shop.adafruit.com/970x728/3316-00.jpg" height="300"/>
 

@@ -258,13 +258,13 @@ uint8_t Adafruit_VL6180X::read8(uint16_t address)
 {
   uint8_t data;
 
-  Wire.beginTransmission(_i2caddr);
-  Wire.write(address>>8);
-  Wire.write(address);
-  Wire.endTransmission();
+  _i2c->beginTransmission(_i2caddr);
+  _i2c->write(address>>8);
+  _i2c->write(address);
+  _i2c->endTransmission();
 
-  Wire.requestFrom(_i2caddr, (uint8_t)1);
-  data = Wire.read();
+  _i2c->requestFrom(_i2caddr, (uint8_t)1);
+  data = _i2c->read();
 
 #if defined(I2C_DEBUG)
   Serial.print("\t$"); Serial.print(address, HEX); Serial.print(": 0x"); Serial.println(data, HEX);
@@ -279,15 +279,15 @@ uint16_t Adafruit_VL6180X::read16(uint16_t address)
 {
   uint16_t data;
 
-  Wire.beginTransmission(_i2caddr);
-  Wire.write(address>>8);
-  Wire.write(address);
-  Wire.endTransmission();
+  _i2c->beginTransmission(_i2caddr);
+  _i2c->write(address>>8);
+  _i2c->write(address);
+  _i2c->endTransmission();
 
-  Wire.requestFrom(_i2caddr, (uint8_t)2);
-  data = Wire.read();
+  _i2c->requestFrom(_i2caddr, (uint8_t)2);
+  data = _i2c->read();
   data <<= 8;
-  data |= Wire.read();
+  data |= _i2c->read();
   
   return data;
 }
@@ -295,11 +295,11 @@ uint16_t Adafruit_VL6180X::read16(uint16_t address)
 // write 1 byte
 void Adafruit_VL6180X::write8(uint16_t address, uint8_t data)
 {
-  Wire.beginTransmission(_i2caddr);
-  Wire.write(address>>8);
-  Wire.write(address);
-  Wire.write(data);  
-  Wire.endTransmission();
+  _i2c->beginTransmission(_i2caddr);
+  _i2c->write(address>>8);
+  _i2c->write(address);
+  _i2c->write(data);  
+  _i2c->endTransmission();
 
 #if defined(I2C_DEBUG)
   Serial.print("\t$"); Serial.print(address, HEX); Serial.print(" = 0x"); Serial.println(data, HEX);
@@ -310,10 +310,10 @@ void Adafruit_VL6180X::write8(uint16_t address, uint8_t data)
 // write 2 bytes
 void Adafruit_VL6180X::write16(uint16_t address, uint16_t data)
 {
-  Wire.beginTransmission(_i2caddr);
-  Wire.write(address>>8);
-  Wire.write(address);
-  Wire.write(data>>8);
-  Wire.write(data);
-  Wire.endTransmission();
+  _i2c->beginTransmission(_i2caddr);
+  _i2c->write(address>>8);
+  _i2c->write(address);
+  _i2c->write(data>>8);
+  _i2c->write(data);
+  _i2c->endTransmission();
 }

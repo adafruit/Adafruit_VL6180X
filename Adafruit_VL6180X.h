@@ -87,6 +87,11 @@ public:
   float readLux(uint8_t gain);
   uint8_t readRangeStatus(void);
 
+  boolean startRange(void);
+  boolean isRangeComplete(void);
+  boolean waitRangeComplete(void);
+  uint8_t readRangeResult(void);
+
 private:
   void loadSettings(void);
 

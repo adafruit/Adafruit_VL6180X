@@ -5,3 +5,7 @@ getAddress	KEYWORD2
 readRange	KEYWORD2
 readLux	KEYWORD2
 readRangeStatus	KEYWORD2
+startRange	KEYWORD2
+isRangeComplete	KEYWORD2
+waitRangeComplete	KEYWORD2
+readRangeResult	KEYWORD2

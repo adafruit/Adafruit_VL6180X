@@ -15,6 +15,12 @@ Adafruit_VL6180X lox1 = Adafruit_VL6180X();
 Adafruit_VL6180X lox2 = Adafruit_VL6180X();
 Adafruit_VL6180X lox3 = Adafruit_VL6180X();
 
+// Setup mode for doing reads
+typedef enum {RUN_MODE_DEFAULT, RUN_MODE_TIMED, RUN_MODE_ASYNC} runmode_t;
+
+runmode_t run_mode = RUN_MODE_DEFAULT;
+
+
 /*
     Reset all sensors by setting all of their XSHUT pins low for delay(10), then set all XSHUT high to bring out of reset
     Keep sensor #1 awake by keeping XSHUT pin high
@@ -123,6 +129,65 @@ void read_sensors() {
   Serial.println();
 }
 
+void timed_read_sensors() {
+  uint32_t start_time = millis();
+  uint8_t range_lox1 = lox1.readRange();
+  uint8_t status_lox1 = lox1.readRangeStatus();
+  uint8_t range_lox2 = lox2.readRange();
+  uint8_t status_lox2 = lox2.readRangeStatus();
+  uint8_t range_lox3 = lox3.readRange();
+  uint8_t status_lox3 = lox3.readRangeStatus();
+  uint32_t delta_time = millis() - start_time;
+  Serial.print(delta_time, DEC);
+  Serial.print(" : ");
+  if (status_lox1 == VL6180X_ERROR_NONE) Serial.print(range_lox1, DEC);
+  else Serial.print("###");
+  Serial.print(" : ");
+  if (status_lox2 == VL6180X_ERROR_NONE) Serial.print(range_lox2, DEC);
+  else Serial.print("###");
+  Serial.print(" : ");
+  if (status_lox3 == VL6180X_ERROR_NONE) Serial.print(range_lox3, DEC);
+  else Serial.print("###");
+
+  Serial.println();
+}
+
+void timed_async_read_sensors() {
+  uint32_t start_time = millis();
+
+  // lets start up all three
+  lox1.startRange();
+  lox2.startRange();
+  lox3.startRange();
+  
+  // wait for each of them to complete
+  lox1.waitRangeComplete();
+  lox2.waitRangeComplete();
+  lox3.waitRangeComplete();
+  
+  uint8_t range_lox1 = lox1.readRangeResult();
+  uint8_t status_lox1 = lox1.readRangeStatus();
+  uint8_t range_lox2 = lox2.readRangeResult();
+  uint8_t status_lox2 = lox2.readRangeStatus();
+  uint8_t range_lox3 = lox3.readRangeResult();
+  uint8_t status_lox3 = lox3.readRangeStatus();
+  uint32_t delta_time = millis() - start_time;
+  Serial.print(delta_time, DEC);
+  Serial.print(" : ");
+  if (status_lox1 == VL6180X_ERROR_NONE) Serial.print(range_lox1, DEC);
+  else Serial.print("###");
+  Serial.print(" : ");
+  if (status_lox2 == VL6180X_ERROR_NONE) Serial.print(range_lox2, DEC);
+  else Serial.print("###");
+  Serial.print(" : ");
+  if (status_lox3 == VL6180X_ERROR_NONE) Serial.print(range_lox3, DEC);
+  else Serial.print("###");
+
+  Serial.println();
+  
+}
+
+
 void setup() {
   Serial.begin(115200);
 
@@ -150,7 +215,42 @@ void setup() {
 }
 
 void loop() {
+  if (Serial.available()) {
+    uint8_t ch = Serial.read();
+    while (Serial.read() != -1) ; // remove the rest
 
-  read_sensors();
+    // See what the user typed in
+    switch (ch) {
+      case 'd':
+      case 'D':
+        run_mode = RUN_MODE_DEFAULT;
+        break;
+      case 't':
+      case 'T':
+        run_mode = RUN_MODE_TIMED;
+        break;
+      case 'a':
+      case 'A':
+        run_mode = RUN_MODE_ASYNC;
+        break;
+      default:
+        Serial.println("\nSet run mode by entering one of the following letters");
+        Serial.println("    D - Default mode");
+        Serial.println("    T - Timed mode - Reads done one after another");
+        Serial.println("    A - Asynchronous mode - Try starting all three at once");
+        run_mode = RUN_MODE_DEFAULT;
+    }
+  }
+  switch (run_mode) {
+    case RUN_MODE_DEFAULT:
+      read_sensors();
+      break;
+    case RUN_MODE_TIMED:
+      timed_read_sensors();
+      break;
+    case RUN_MODE_ASYNC:
+      timed_async_read_sensors();
+      break;
+  }
   delay(100);
 }

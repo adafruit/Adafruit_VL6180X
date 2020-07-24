@@ -1,0 +1,7 @@
+Adafruit_VL6180X	KEYWORD1
+begin	KEYWORD2
+setAddress	KEYWORD2
+getAddress	KEYWORD2
+readRange	KEYWORD2
+readLux	KEYWORD2
+readRangeStatus	KEYWORD2

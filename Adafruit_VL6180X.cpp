@@ -69,6 +69,31 @@ boolean Adafruit_VL6180X::begin(TwoWire *theWire) {
 
 /**************************************************************************/
 /*!
+    @brief  Sets the address of the device to a different address.
+   chip.
+    @param newAddr new I2C address for the device.
+    @returns True if write succeeded.
+*/
+/**************************************************************************/
+boolean Adafruit_VL6180X::setAddress(uint8_t newAddr) {
+  // BUGBUG - not sure if we detect errors or not...
+  // The register is mentioned in app notes.
+  write8(VL6180X_REG_SLAVE_DEVICE_ADDRESS, newAddr & 0x7F);
+  _i2caddr = newAddr;
+  return true;
+}
+
+/**************************************************************************/
+/*!
+    @brief  gets the address of the device
+   chip.
+    @returns the address
+*/
+/**************************************************************************/
+uint8_t Adafruit_VL6180X::getAddress(void) { return _i2caddr; }
+
+/**************************************************************************/
+/*!
     @brief  Load the settings for proximity/distance ranging
 */
 /**************************************************************************/

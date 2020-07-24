@@ -95,6 +95,18 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ad9ed8ed612095d54f46e559853d6df9b"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_adafruit___v_l6180_x.html#ad9ed8ed612095d54f46e559853d6df9b">readRangeStatus</a> (void)</td></tr>
 <tr class="memdesc:ad9ed8ed612095d54f46e559853d6df9b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Request ranging success/error message (retreive after ranging)  <a href="#ad9ed8ed612095d54f46e559853d6df9b">More...</a><br /></td></tr>
 <tr class="separator:ad9ed8ed612095d54f46e559853d6df9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a83c4753c83243efabf455733080b53e7"><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_adafruit___v_l6180_x.html#a83c4753c83243efabf455733080b53e7">startRange</a> (void)</td></tr>
+<tr class="memdesc:a83c4753c83243efabf455733080b53e7"><td class="mdescLeft">&#160;</td><td class="mdescRight">start Single shot ranging. The caller of this should have code that waits until the read completes, by either calling <a class="el" href="class_adafruit___v_l6180_x.html#ac6fd4646924f6e45d3252f14eded4d0f">waitRangeComplete</a> or calling <a class="el" href="class_adafruit___v_l6180_x.html#a71f7b1b466c37cb973842f3f727dd484">isRangeComplete</a> until it returns true. And then the code should call <a class="el" href="class_adafruit___v_l6180_x.html#afad8b4444a4e877e2446118e706c6eaa">readRangeResult</a> to retrieve the range value and clear out the internal status.  <a href="#a83c4753c83243efabf455733080b53e7">More...</a><br /></td></tr>
+<tr class="separator:a83c4753c83243efabf455733080b53e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a71f7b1b466c37cb973842f3f727dd484"><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_adafruit___v_l6180_x.html#a71f7b1b466c37cb973842f3f727dd484">isRangeComplete</a> (void)</td></tr>
+<tr class="memdesc:a71f7b1b466c37cb973842f3f727dd484"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check to see if the range command completed.  <a href="#a71f7b1b466c37cb973842f3f727dd484">More...</a><br /></td></tr>
+<tr class="separator:a71f7b1b466c37cb973842f3f727dd484"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac6fd4646924f6e45d3252f14eded4d0f"><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_adafruit___v_l6180_x.html#ac6fd4646924f6e45d3252f14eded4d0f">waitRangeComplete</a> (void)</td></tr>
+<tr class="memdesc:ac6fd4646924f6e45d3252f14eded4d0f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wait until Range completed.  <a href="#ac6fd4646924f6e45d3252f14eded4d0f">More...</a><br /></td></tr>
+<tr class="separator:ac6fd4646924f6e45d3252f14eded4d0f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afad8b4444a4e877e2446118e706c6eaa"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_adafruit___v_l6180_x.html#afad8b4444a4e877e2446118e706c6eaa">readRangeResult</a> (void)</td></tr>
+<tr class="memdesc:afad8b4444a4e877e2446118e706c6eaa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return results of read reqyest also clears out the interrupt Be sure to check the return of <a class="el" href="class_adafruit___v_l6180_x.html#ad9ed8ed612095d54f46e559853d6df9b">readRangeStatus</a> to before using the return value!  <a href="#afad8b4444a4e877e2446118e706c6eaa">More...</a><br /></td></tr>
+<tr class="separator:afad8b4444a4e877e2446118e706c6eaa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>! Class for managing connection and state to a VL6180X sensor </p>
@@ -240,6 +252,90 @@ Public Member Functions</h2></td></tr>
 
 <p>Request ranging success/error message (retreive after ranging) </p>
 <dl class="section return"><dt>Returns</dt><dd>One of possible VL6180X_ERROR_* values </dd></dl>
+
+</div>
+</div>
+<a id="a83c4753c83243efabf455733080b53e7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a83c4753c83243efabf455733080b53e7">&#9670;&nbsp;</a></span>startRange()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">boolean Adafruit_VL6180X::startRange </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>start Single shot ranging. The caller of this should have code that waits until the read completes, by either calling <a class="el" href="class_adafruit___v_l6180_x.html#ac6fd4646924f6e45d3252f14eded4d0f">waitRangeComplete</a> or calling <a class="el" href="class_adafruit___v_l6180_x.html#a71f7b1b466c37cb973842f3f727dd484">isRangeComplete</a> until it returns true. And then the code should call <a class="el" href="class_adafruit___v_l6180_x.html#afad8b4444a4e877e2446118e706c6eaa">readRangeResult</a> to retrieve the range value and clear out the internal status. </p>
+<dl class="section return"><dt>Returns</dt><dd>true if range completed. </dd></dl>
+
+</div>
+</div>
+<a id="a71f7b1b466c37cb973842f3f727dd484"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a71f7b1b466c37cb973842f3f727dd484">&#9670;&nbsp;</a></span>isRangeComplete()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">boolean Adafruit_VL6180X::isRangeComplete </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Check to see if the range command completed. </p>
+<dl class="section return"><dt>Returns</dt><dd>true if range completed. </dd></dl>
+
+</div>
+</div>
+<a id="ac6fd4646924f6e45d3252f14eded4d0f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac6fd4646924f6e45d3252f14eded4d0f">&#9670;&nbsp;</a></span>waitRangeComplete()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">boolean Adafruit_VL6180X::waitRangeComplete </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Wait until Range completed. </p>
+<dl class="section return"><dt>Returns</dt><dd>true if range completed. </dd></dl>
+
+</div>
+</div>
+<a id="afad8b4444a4e877e2446118e706c6eaa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afad8b4444a4e877e2446118e706c6eaa">&#9670;&nbsp;</a></span>readRangeResult()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint8_t Adafruit_VL6180X::readRangeResult </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Return results of read reqyest also clears out the interrupt Be sure to check the return of <a class="el" href="class_adafruit___v_l6180_x.html#ad9ed8ed612095d54f46e559853d6df9b">readRangeStatus</a> to before using the return value! </p>
+<dl class="section return"><dt>Returns</dt><dd>if range started. </dd></dl>
 
 </div>
 </div>

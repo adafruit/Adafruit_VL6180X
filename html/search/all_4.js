@@ -1,4 +1,7 @@
 var searchData=
 [
-  ['setaddress',['setAddress',['../class_adafruit___v_l6180_x.html#af0a8525569ec005f66180a4ef6acf890',1,'Adafruit_VL6180X']]]
+  ['readlux',['readLux',['../class_adafruit___v_l6180_x.html#ac65d18de427dd681e482112341db0153',1,'Adafruit_VL6180X']]],
+  ['readrange',['readRange',['../class_adafruit___v_l6180_x.html#ab8a0b7127f921d3db8f83b7edc78bb97',1,'Adafruit_VL6180X']]],
+  ['readrangeresult',['readRangeResult',['../class_adafruit___v_l6180_x.html#afad8b4444a4e877e2446118e706c6eaa',1,'Adafruit_VL6180X']]],
+  ['readrangestatus',['readRangeStatus',['../class_adafruit___v_l6180_x.html#ad9ed8ed612095d54f46e559853d6df9b',1,'Adafruit_VL6180X']]]
 ];

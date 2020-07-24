@@ -51,6 +51,8 @@
 #define VL6180X_REG_RESULT_ALS_VAL 0x050
 ///! Ranging reading value
 #define VL6180X_REG_RESULT_RANGE_VAL 0x062
+///! I2C Slave Device Address
+#define VL6180X_REG_SLAVE_DEVICE_ADDRESS 0x212
 
 #define VL6180X_ALS_GAIN_1 0x06    ///< 1x gain
 #define VL6180X_ALS_GAIN_1_25 0x05 ///< 1.25x gain
@@ -78,6 +80,9 @@ class Adafruit_VL6180X {
 public:
   Adafruit_VL6180X();
   boolean begin(TwoWire *theWire = NULL);
+  boolean setAddress(uint8_t newAddr);
+  uint8_t getAddress(void);
+
   uint8_t readRange(void);
   float readLux(uint8_t gain);
   uint8_t readRangeStatus(void);

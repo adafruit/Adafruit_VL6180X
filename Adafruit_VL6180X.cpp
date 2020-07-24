@@ -217,41 +217,41 @@ boolean Adafruit_VL6180X::startRange(void) {
 /**************************************************************************/
 
 boolean Adafruit_VL6180X::isRangeComplete(void) {
-  
+
   // Poll until bit 2 is set
   if ((read8(VL6180X_REG_RESULT_INTERRUPT_STATUS_GPIO) & 0x04))
     return true;
 
   return false;
-}  
+}
 
 /**************************************************************************/
 /*!
     @brief  Wait until Range completed
-    @return true if range completed. 
+    @return true if range completed.
 */
 /**************************************************************************/
 
 boolean Adafruit_VL6180X::waitRangeComplete(void) {
-  
+
   // Poll until bit 2 is set
   while (!(read8(VL6180X_REG_RESULT_INTERRUPT_STATUS_GPIO) & 0x04))
     ;
 
   return true;
-}  
+}
 
 /**************************************************************************/
 /*!
     @brief  Return results of read reqyest also clears out the interrupt
     Be sure to check the return of {@link readRangeStatus} to before using
     the return value!
-    @return if range started. 
+    @return if range started.
 */
 /**************************************************************************/
 
 uint8_t Adafruit_VL6180X::readRangeResult(void) {
-  
+
   // read range in mm
   uint8_t range = read8(VL6180X_REG_RESULT_RANGE_VAL);
 

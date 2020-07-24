@@ -80,6 +80,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ad2f7b795f37081e622706c9f6509e565"><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_adafruit___v_l6180_x.html#ad2f7b795f37081e622706c9f6509e565">begin</a> (TwoWire *theWire=NULL)</td></tr>
 <tr class="memdesc:ad2f7b795f37081e622706c9f6509e565"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes I2C interface, checks that VL6180X is found and resets chip.  <a href="#ad2f7b795f37081e622706c9f6509e565">More...</a><br /></td></tr>
 <tr class="separator:ad2f7b795f37081e622706c9f6509e565"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af0a8525569ec005f66180a4ef6acf890"><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_adafruit___v_l6180_x.html#af0a8525569ec005f66180a4ef6acf890">setAddress</a> (uint8_t newAddr)</td></tr>
+<tr class="memdesc:af0a8525569ec005f66180a4ef6acf890"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the address of the device to a different address. chip.  <a href="#af0a8525569ec005f66180a4ef6acf890">More...</a><br /></td></tr>
+<tr class="separator:af0a8525569ec005f66180a4ef6acf890"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a23f321ae2f59a6619c4cbe374ee336d5"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_adafruit___v_l6180_x.html#a23f321ae2f59a6619c4cbe374ee336d5">getAddress</a> (void)</td></tr>
+<tr class="memdesc:a23f321ae2f59a6619c4cbe374ee336d5"><td class="mdescLeft">&#160;</td><td class="mdescRight">gets the address of the device chip.  <a href="#a23f321ae2f59a6619c4cbe374ee336d5">More...</a><br /></td></tr>
+<tr class="separator:a23f321ae2f59a6619c4cbe374ee336d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab8a0b7127f921d3db8f83b7edc78bb97"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_adafruit___v_l6180_x.html#ab8a0b7127f921d3db8f83b7edc78bb97">readRange</a> (void)</td></tr>
 <tr class="memdesc:ab8a0b7127f921d3db8f83b7edc78bb97"><td class="mdescLeft">&#160;</td><td class="mdescRight">Single shot ranging. Be sure to check the return of <a class="el" href="class_adafruit___v_l6180_x.html#ad9ed8ed612095d54f46e559853d6df9b">readRangeStatus</a> to before using the return value!  <a href="#ab8a0b7127f921d3db8f83b7edc78bb97">More...</a><br /></td></tr>
 <tr class="separator:ab8a0b7127f921d3db8f83b7edc78bb97"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -117,6 +123,54 @@ Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True if chip found and initialized, False otherwise </dd></dl>
+
+</div>
+</div>
+<a id="af0a8525569ec005f66180a4ef6acf890"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af0a8525569ec005f66180a4ef6acf890">&#9670;&nbsp;</a></span>setAddress()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">boolean Adafruit_VL6180X::setAddress </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>newAddr</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Sets the address of the device to a different address. chip. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">newAddr</td><td>new I2C address for the device. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if write succeeded. </dd></dl>
+
+</div>
+</div>
+<a id="a23f321ae2f59a6619c4cbe374ee336d5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a23f321ae2f59a6619c4cbe374ee336d5">&#9670;&nbsp;</a></span>getAddress()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint8_t Adafruit_VL6180X::getAddress </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>gets the address of the device chip. </p>
+<dl class="section return"><dt>Returns</dt><dd>the address </dd></dl>
 
 </div>
 </div>

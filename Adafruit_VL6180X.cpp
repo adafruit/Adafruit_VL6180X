@@ -30,6 +30,10 @@
 #include "Arduino.h"
 #include <Wire.h>
 
+// Define some additional registers mentioned in application notes and we use
+///! period between each measurement when in continuous mode
+#define SYSRANGE__INTERMEASUREMENT_PERIOD 0x001b // P19 application notes
+
 /**************************************************************************/
 /*!
     @brief  Instantiates a new VL6180X class
@@ -150,7 +154,8 @@ void Adafruit_VL6180X::loadSettings(void) {
                         // of the ranging sensor
 
   // Optional: Public registers - See data sheet for more detail
-  write8(0x001b, 0x09); // Set default ranging inter-measurement
+  write8(SYSRANGE__INTERMEASUREMENT_PERIOD,
+         0x09);         // Set default ranging inter-measurement
                         // period to 100ms
   write8(0x003e, 0x31); // Set default ALS inter-measurement period
                         // to 500ms
@@ -259,6 +264,41 @@ uint8_t Adafruit_VL6180X::readRangeResult(void) {
   write8(VL6180X_REG_SYSTEM_INTERRUPT_CLEAR, 0x07);
 
   return range;
+}
+
+/**************************************************************************/
+/*!
+    @brief  Start continuous ranging
+    @param  period_ms Optional Period between ranges in ms.  Values will
+    be rounded down to 10ms units with minimum of 10ms.  Default is 50
+*/
+/**************************************************************************/
+
+void Adafruit_VL6180X::startRangeContinuous(uint16_t period_ms) {
+  uint8_t period_reg = 0;
+  if (period_ms > 10) {
+    if (period_ms < 2550)
+      period_reg = (period_ms / 10) - 1;
+    else
+      period_reg = 254;
+  }
+  // Set  ranging inter-measurement
+  write8(SYSRANGE__INTERMEASUREMENT_PERIOD, period_reg);
+
+  // Start a continuous range measurement
+  write8(VL6180X_REG_SYSRANGE_START, 0x03);
+}
+
+/**************************************************************************/
+/*!
+    @brief stop continuous range operation.
+*/
+/**************************************************************************/
+
+void Adafruit_VL6180X::stopRangeContinuous(void) {
+  // stop the continuous range operation, by setting the range register
+  // back to 1, Page 7 of appication notes
+  write8(VL6180X_REG_SYSRANGE_START, 0x01);
 }
 
 /**************************************************************************/

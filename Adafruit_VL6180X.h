@@ -92,6 +92,10 @@ public:
   boolean waitRangeComplete(void);
   uint8_t readRangeResult(void);
 
+  void startRangeContinuous(uint16_t period_ms = 50);
+  void stopRangeContinuous(void);
+  // readRangeResult and isRangeComplete apply here is well
+
 private:
   void loadSettings(void);
 

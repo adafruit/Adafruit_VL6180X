@@ -9,3 +9,5 @@ startRange	KEYWORD2
 isRangeComplete	KEYWORD2
 waitRangeComplete	KEYWORD2
 readRangeResult	KEYWORD2
+startRangeContinuous	KEYWORD2
+stopRangeContinuous	KEYWORD2

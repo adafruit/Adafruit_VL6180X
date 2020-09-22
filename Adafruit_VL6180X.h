@@ -78,7 +78,7 @@
 ///! Class for managing connection and state to a VL6180X sensor
 class Adafruit_VL6180X {
 public:
-  Adafruit_VL6180X();
+  Adafruit_VL6180X(uint8_t i2caddr = VL6180X_DEFAULT_I2C_ADDR);
   boolean begin(TwoWire *theWire = NULL);
   boolean setAddress(uint8_t newAddr);
   uint8_t getAddress(void);

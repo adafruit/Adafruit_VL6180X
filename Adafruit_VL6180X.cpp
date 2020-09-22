@@ -37,9 +37,11 @@
 /**************************************************************************/
 /*!
     @brief  Instantiates a new VL6180X class
+    @param  i2caddr Optional initial i2c address of the chip,
+   VL6180X_DEFAULT_I2C_ADDR is used by default
 */
 /**************************************************************************/
-Adafruit_VL6180X::Adafruit_VL6180X(void) {}
+Adafruit_VL6180X::Adafruit_VL6180X(uint8_t i2caddr) : _i2caddr(i2caddr) {}
 
 /**************************************************************************/
 /*!
@@ -50,7 +52,6 @@ Adafruit_VL6180X::Adafruit_VL6180X(void) {}
 */
 /**************************************************************************/
 boolean Adafruit_VL6180X::begin(TwoWire *theWire) {
-  _i2caddr = VL6180X_DEFAULT_I2C_ADDR;
   if (!theWire) {
     _i2c = &Wire;
   } else {

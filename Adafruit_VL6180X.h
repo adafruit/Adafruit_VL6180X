@@ -19,9 +19,7 @@
  */
 
 #include "Arduino.h"
-#include <Wire.h>
-
-//#define I2C_DEBUG
+#include <Adafruit_I2CDevice.h>
 
 #define VL6180X_DEFAULT_I2C_ADDR 0x29 ///< The fixed I2C addres
 
@@ -79,7 +77,7 @@
 class Adafruit_VL6180X {
 public:
   Adafruit_VL6180X(uint8_t i2caddr = VL6180X_DEFAULT_I2C_ADDR);
-  boolean begin(TwoWire *theWire = NULL);
+  boolean begin(TwoWire *theWire = &Wire);
   boolean setAddress(uint8_t newAddr);
   uint8_t getAddress(void);
 
@@ -97,6 +95,7 @@ public:
   // readRangeResult and isRangeComplete apply here is well
 
 private:
+  Adafruit_I2CDevice *i2c_dev = NULL; ///< Pointer to I2C bus interface
   void loadSettings(void);
 
   void write8(uint16_t address, uint8_t data);

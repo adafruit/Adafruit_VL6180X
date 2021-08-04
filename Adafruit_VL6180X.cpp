@@ -28,7 +28,6 @@
 
 #include "Adafruit_VL6180X.h"
 #include "Arduino.h"
-#include <Wire.h>
 
 // Define some additional registers mentioned in application notes and we use
 ///! period between each measurement when in continuous mode
@@ -52,12 +51,12 @@ Adafruit_VL6180X::Adafruit_VL6180X(uint8_t i2caddr) : _i2caddr(i2caddr) {}
 */
 /**************************************************************************/
 boolean Adafruit_VL6180X::begin(TwoWire *theWire) {
-  if (!theWire) {
-    _i2c = &Wire;
-  } else {
-    _i2c = theWire;
-  }
-  _i2c->begin();
+  // only needed to support setAddress()
+  _i2c = theWire;
+
+  i2c_dev = new Adafruit_I2CDevice(_i2caddr, _i2c);
+  if (!i2c_dev->begin())
+    return false;
 
   if (read8(VL6180X_REG_IDENTIFICATION_MODEL_ID) != 0xB4) {
     return false;
@@ -85,7 +84,11 @@ boolean Adafruit_VL6180X::setAddress(uint8_t newAddr) {
   // The register is mentioned in app notes.
   write8(VL6180X_REG_SLAVE_DEVICE_ADDRESS, newAddr & 0x7F);
   _i2caddr = newAddr;
-  return true;
+
+  delete i2c_dev;
+  i2c_dev = new Adafruit_I2CDevice(_i2caddr, _i2c);
+
+  return i2c_dev->begin();
 }
 
 /**************************************************************************/
@@ -392,65 +395,39 @@ float Adafruit_VL6180X::readLux(uint8_t gain) {
 
 // Read 1 byte from the VL6180X at 'address'
 uint8_t Adafruit_VL6180X::read8(uint16_t address) {
-  uint8_t data;
-
-  _i2c->beginTransmission(_i2caddr);
-  _i2c->write(address >> 8);
-  _i2c->write(address);
-  _i2c->endTransmission();
-
-  _i2c->requestFrom(_i2caddr, (uint8_t)1);
-  data = _i2c->read();
-
-#if defined(I2C_DEBUG)
-  Serial.print("\t$");
-  Serial.print(address, HEX);
-  Serial.print(": 0x");
-  Serial.println(data, HEX);
-#endif
-
-  return data;
+  uint8_t buffer[2];
+  buffer[0] = uint8_t(address >> 8);
+  buffer[1] = uint8_t(address & 0xFF);
+  i2c_dev->write(buffer, 2);
+  i2c_dev->read(buffer, 1);
+  return buffer[0];
 }
 
 // Read 2 byte from the VL6180X at 'address'
 uint16_t Adafruit_VL6180X::read16(uint16_t address) {
-  uint16_t data;
-
-  _i2c->beginTransmission(_i2caddr);
-  _i2c->write(address >> 8);
-  _i2c->write(address);
-  _i2c->endTransmission();
-
-  _i2c->requestFrom(_i2caddr, (uint8_t)2);
-  data = _i2c->read();
-  data <<= 8;
-  data |= _i2c->read();
-
-  return data;
+  uint8_t buffer[2];
+  buffer[0] = uint8_t(address >> 8);
+  buffer[1] = uint8_t(address & 0xFF);
+  i2c_dev->write(buffer, 2);
+  i2c_dev->read(buffer, 2);
+  return uint16_t(buffer[0]) << 8 | uint16_t(buffer[1]);
 }
 
 // write 1 byte
 void Adafruit_VL6180X::write8(uint16_t address, uint8_t data) {
-  _i2c->beginTransmission(_i2caddr);
-  _i2c->write(address >> 8);
-  _i2c->write(address);
-  _i2c->write(data);
-  _i2c->endTransmission();
-
-#if defined(I2C_DEBUG)
-  Serial.print("\t$");
-  Serial.print(address, HEX);
-  Serial.print(" = 0x");
-  Serial.println(data, HEX);
-#endif
+  uint8_t buffer[3];
+  buffer[0] = uint8_t(address >> 8);
+  buffer[1] = uint8_t(address & 0xFF);
+  buffer[2] = data;
+  i2c_dev->write(buffer, 3);
 }
 
 // write 2 bytes
 void Adafruit_VL6180X::write16(uint16_t address, uint16_t data) {
-  _i2c->beginTransmission(_i2caddr);
-  _i2c->write(address >> 8);
-  _i2c->write(address);
-  _i2c->write(data >> 8);
-  _i2c->write(data);
-  _i2c->endTransmission();
+  uint8_t buffer[4];
+  buffer[0] = uint8_t(address >> 8);
+  buffer[1] = uint8_t(address & 0xFF);
+  buffer[2] = uint8_t(data >> 8);
+  buffer[3] = uint8_t(data & 0xFF);
+  i2c_dev->write(buffer, 4);
 }

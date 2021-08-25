@@ -77,6 +77,7 @@
 class Adafruit_VL6180X {
 public:
   Adafruit_VL6180X(uint8_t i2caddr = VL6180X_DEFAULT_I2C_ADDR);
+  ~Adafruit_VL6180X();
   boolean begin(TwoWire *theWire = &Wire);
   boolean setAddress(uint8_t newAddr);
   uint8_t getAddress(void);

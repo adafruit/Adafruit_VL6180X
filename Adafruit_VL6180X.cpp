@@ -33,6 +33,11 @@
 ///! period between each measurement when in continuous mode
 #define SYSRANGE__INTERMEASUREMENT_PERIOD 0x001b // P19 application notes
 
+Adafruit_VL6180X::~Adafruit_VL6180X() {
+  if (i2c_dev)
+    delete i2c_dev;
+}
+
 /**************************************************************************/
 /*!
     @brief  Instantiates a new VL6180X class
@@ -54,19 +59,22 @@ boolean Adafruit_VL6180X::begin(TwoWire *theWire) {
   // only needed to support setAddress()
   _i2c = theWire;
 
+  if (i2c_dev)
+    delete i2c_dev;
   i2c_dev = new Adafruit_I2CDevice(_i2caddr, _i2c);
   if (!i2c_dev->begin())
     return false;
 
+  // check for expected model id
   if (read8(VL6180X_REG_IDENTIFICATION_MODEL_ID) != 0xB4) {
     return false;
   }
 
-  // if (read8(VL6180X_REG_SYSTEM_FRESH_OUT_OF_RESET) == 0x01) {
-  loadSettings();
-  //}
-
-  write8(VL6180X_REG_SYSTEM_FRESH_OUT_OF_RESET, 0x00);
+  // fresh out of reset?
+  if (read8(VL6180X_REG_SYSTEM_FRESH_OUT_OF_RESET) & 0x01) {
+    loadSettings();
+    write8(VL6180X_REG_SYSTEM_FRESH_OUT_OF_RESET, 0x00);
+  }
 
   return true;
 }
@@ -85,7 +93,8 @@ boolean Adafruit_VL6180X::setAddress(uint8_t newAddr) {
   write8(VL6180X_REG_SLAVE_DEVICE_ADDRESS, newAddr & 0x7F);
   _i2caddr = newAddr;
 
-  delete i2c_dev;
+  if (i2c_dev)
+    delete i2c_dev;
   i2c_dev = new Adafruit_I2CDevice(_i2caddr, _i2c);
 
   return i2c_dev->begin();

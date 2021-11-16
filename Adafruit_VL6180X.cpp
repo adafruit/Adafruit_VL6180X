@@ -162,7 +162,7 @@ void Adafruit_VL6180X::loadSettings(void) {
   write8(0x0031, 0xFF); // sets the # of range measurements after
                         // which auto calibration of system is
                         // performed
-  write8(0x0040, 0x63); // Set ALS integration time to 100ms
+  write8(0x0041, 0x63); // Set ALS integration time to 100ms
   write8(0x002e, 0x01); // perform a single temperature calibration
                         // of the ranging sensor
 

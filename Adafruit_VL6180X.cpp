@@ -396,6 +396,44 @@ float Adafruit_VL6180X::readLux(uint8_t gain) {
   return lux;
 }
 
+
+
+/**************************************************************************/
+/*!
+    @brief  Single shot lux measurement
+    @param  offset Offset setting
+*/
+/**************************************************************************/
+
+void Adafruit_VL6180X::setOffset(uint8_t offset) {
+  //write the offset
+  write8(VL6180X_REG_SYSRANGE_PART_TO_PART_RANGE_OFFSET, offset);
+}
+
+
+/**************************************************************************/
+/*!
+    @brief  Single shot lux measurement
+    @param  id_ptr Pointer to array of id bytes
+*/
+/**************************************************************************/
+
+void Adafruit_VL6180X::getID(uint8_t * id_ptr) {
+  uint8_t id[8];
+
+  id[0] = read8(VL6180X_REG_IDENTIFICATION_MODEL_ID + 0);
+  id[1] = read8(VL6180X_REG_IDENTIFICATION_MODEL_ID + 1);
+  id[2] = read8(VL6180X_REG_IDENTIFICATION_MODEL_ID + 2);
+  id[3] = read8(VL6180X_REG_IDENTIFICATION_MODEL_ID + 3);
+  id[4] = read8(VL6180X_REG_IDENTIFICATION_MODEL_ID + 4);
+  id[5] = read8(VL6180X_REG_IDENTIFICATION_MODEL_ID + 5);
+  id[6] = read8(VL6180X_REG_IDENTIFICATION_MODEL_ID + 6);
+  id[7] = read8(VL6180X_REG_IDENTIFICATION_MODEL_ID + 7);
+
+  id_ptr = &id[0];
+}
+
+
 /**************************************************************************/
 /*!
     @brief  I2C low level interfacing

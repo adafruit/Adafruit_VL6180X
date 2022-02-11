@@ -33,6 +33,8 @@
 #define VL6180X_REG_SYSTEM_FRESH_OUT_OF_RESET 0x016
 ///! Trigger Ranging
 #define VL6180X_REG_SYSRANGE_START 0x018
+///! Part to part range offset
+#define VL6180X_REG_SYSRANGE_PART_TO_PART_RANGE_OFFSET 0x024
 ///! Trigger Lux Reading
 #define VL6180X_REG_SYSALS_START 0x038
 ///! Lux reading gain
@@ -94,6 +96,9 @@ public:
   void startRangeContinuous(uint16_t period_ms = 50);
   void stopRangeContinuous(void);
   // readRangeResult and isRangeComplete apply here is well
+
+  void setOffset(uint8_t offset);
+  void getID(uint8_t * id_ptr);
 
 private:
   Adafruit_I2CDevice *i2c_dev = NULL; ///< Pointer to I2C bus interface

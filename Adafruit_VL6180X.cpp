@@ -424,7 +424,6 @@ void Adafruit_VL6180X::getID(uint8_t *id_ptr) {
   id_ptr[4] = read8(VL6180X_REG_IDENTIFICATION_MODEL_ID + 4);
   id_ptr[6] = read8(VL6180X_REG_IDENTIFICATION_MODEL_ID + 6);
   id_ptr[7] = read8(VL6180X_REG_IDENTIFICATION_MODEL_ID + 7);
-
 }
 
 /**************************************************************************/

@@ -98,7 +98,7 @@ public:
   // readRangeResult and isRangeComplete apply here is well
 
   void setOffset(uint8_t offset);
-  void getID(uint8_t * id_ptr);
+  void getID(uint8_t *id_ptr);
 
 private:
   Adafruit_I2CDevice *i2c_dev = NULL; ///< Pointer to I2C bus interface

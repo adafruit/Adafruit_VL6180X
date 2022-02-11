@@ -400,7 +400,7 @@ float Adafruit_VL6180X::readLux(uint8_t gain) {
 
 /**************************************************************************/
 /*!
-    @brief  Single shot lux measurement
+    @brief  Set the offset
     @param  offset Offset setting
 */
 /**************************************************************************/
@@ -413,7 +413,7 @@ void Adafruit_VL6180X::setOffset(uint8_t offset) {
 
 /**************************************************************************/
 /*!
-    @brief  Single shot lux measurement
+    @brief  Get the 8 bytes of id
     @param  id_ptr Pointer to array of id bytes
 */
 /**************************************************************************/

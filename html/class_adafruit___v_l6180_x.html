@@ -113,6 +113,12 @@ Public Member Functions</h2></td></tr>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_adafruit___v_l6180_x.html#af1c23bbde60cb128d239faf352aba790">stopRangeContinuous</a> (void)</td></tr>
 <tr class="memdesc:af1c23bbde60cb128d239faf352aba790"><td class="mdescLeft">&#160;</td><td class="mdescRight">stop continuous range operation. <br /></td></tr>
 <tr class="separator:af1c23bbde60cb128d239faf352aba790"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a348568bef01f297c0b6b2806d1342946"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_adafruit___v_l6180_x.html#a348568bef01f297c0b6b2806d1342946">setOffset</a> (uint8_t offset)</td></tr>
+<tr class="memdesc:a348568bef01f297c0b6b2806d1342946"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the offset.  <a href="#a348568bef01f297c0b6b2806d1342946">More...</a><br /></td></tr>
+<tr class="separator:a348568bef01f297c0b6b2806d1342946"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3e524a079bfdd7cb8e78486a1bcdcc16"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_adafruit___v_l6180_x.html#a3e524a079bfdd7cb8e78486a1bcdcc16">getID</a> (uint8_t *id_ptr)</td></tr>
+<tr class="memdesc:a3e524a079bfdd7cb8e78486a1bcdcc16"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the 7 bytes of id.  <a href="#a3e524a079bfdd7cb8e78486a1bcdcc16">More...</a><br /></td></tr>
+<tr class="separator:a3e524a079bfdd7cb8e78486a1bcdcc16"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>! Class for managing connection and state to a VL6180X sensor </p>
@@ -392,6 +398,58 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">period_ms</td><td>Optional Period between ranges in ms. Values will be rounded down to 10ms units with minimum of 10ms. Default is 50 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a348568bef01f297c0b6b2806d1342946"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a348568bef01f297c0b6b2806d1342946">&#9670;&nbsp;</a></span>setOffset()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Adafruit_VL6180X::setOffset </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>offset</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set the offset. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">offset</td><td>Offset setting </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a3e524a079bfdd7cb8e78486a1bcdcc16"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3e524a079bfdd7cb8e78486a1bcdcc16">&#9670;&nbsp;</a></span>getID()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Adafruit_VL6180X::getID </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t *&#160;</td>
+          <td class="paramname"><em>id_ptr</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the 7 bytes of id. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">id_ptr</td><td>Pointer to array of id bytes </td></tr>
   </table>
   </dd>
 </dl>

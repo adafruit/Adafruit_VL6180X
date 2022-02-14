@@ -30,6 +30,7 @@ var searchData=
   ['vl6180x_5freg_5fsysals_5fintegration_5fperiod_5fhi',['VL6180X_REG_SYSALS_INTEGRATION_PERIOD_HI',['../_adafruit___v_l6180_x_8h.html#a4545b5d97ad208c4e8f3d12827916a5d',1,'Adafruit_VL6180X.h']]],
   ['vl6180x_5freg_5fsysals_5fintegration_5fperiod_5flo',['VL6180X_REG_SYSALS_INTEGRATION_PERIOD_LO',['../_adafruit___v_l6180_x_8h.html#adff2d140a1c25d5211885ac2f42bceba',1,'Adafruit_VL6180X.h']]],
   ['vl6180x_5freg_5fsysals_5fstart',['VL6180X_REG_SYSALS_START',['../_adafruit___v_l6180_x_8h.html#a30afeecd8928754e071c611914c99d36',1,'Adafruit_VL6180X.h']]],
+  ['vl6180x_5freg_5fsysrange_5fpart_5fto_5fpart_5frange_5foffset',['VL6180X_REG_SYSRANGE_PART_TO_PART_RANGE_OFFSET',['../_adafruit___v_l6180_x_8h.html#a4e9a6bf00cd010043f67f019f975d716',1,'Adafruit_VL6180X.h']]],
   ['vl6180x_5freg_5fsysrange_5fstart',['VL6180X_REG_SYSRANGE_START',['../_adafruit___v_l6180_x_8h.html#a7d46d7526e27e80c59e07d27cc09ac6c',1,'Adafruit_VL6180X.h']]],
   ['vl6180x_5freg_5fsystem_5ffresh_5fout_5fof_5freset',['VL6180X_REG_SYSTEM_FRESH_OUT_OF_RESET',['../_adafruit___v_l6180_x_8h.html#af3920ecf8c7d0d72817b8e5b5c52b328',1,'Adafruit_VL6180X.h']]],
   ['vl6180x_5freg_5fsystem_5finterrupt_5fclear',['VL6180X_REG_SYSTEM_INTERRUPT_CLEAR',['../_adafruit___v_l6180_x_8h.html#ac88c7686bdc1fbb8e6f7a0202aac2615',1,'Adafruit_VL6180X.h']]],

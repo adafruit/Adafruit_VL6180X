@@ -18,6 +18,9 @@
  *
  */
 
+#ifndef _ADAFRUIT_VL6180X_H
+#define _ADAFRUIT_VL6180X_H
+
 #include "Arduino.h"
 #include <Adafruit_I2CDevice.h>
 
@@ -113,3 +116,5 @@ private:
   TwoWire *_i2c;
   uint8_t _i2caddr;
 };
+
+#endif
